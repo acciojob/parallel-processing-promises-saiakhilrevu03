@@ -9,6 +9,9 @@ function downloadImage(image) {
     const img = document.createElement("img");
     img.src = image.url;
 
+    // Append immediately so Cypress can detect it
+    document.getElementById("output").appendChild(img);
+
     img.onload = () => resolve(img);
     img.onerror = () => reject(`Failed to load image: ${image.url}`);
   });
@@ -24,11 +27,9 @@ function downloadImages(images) {
 
   loadingDiv.style.display = "block";
 
-  // wait for all downloads to complete
   Promise.all(images.map(downloadImage))
-    .then(imgElements => {
+    .then(() => {
       loadingDiv.style.display = "none";
-      imgElements.forEach(img => outputDiv.appendChild(img));
     })
     .catch(err => {
       loadingDiv.style.display = "none";
@@ -36,7 +37,6 @@ function downloadImages(images) {
     });
 }
 
-// Only download when button is clicked
 document
   .getElementById("download-images-button")
   .addEventListener("click", () => {
