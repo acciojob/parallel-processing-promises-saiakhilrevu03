@@ -1,1 +1,16 @@
 /*  your css code here. If applicable */
+ #loading {
+      display: none;
+      font-weight: bold;
+      color: blue;
+    }
+    #error {
+      color: red;
+      font-weight: bold;
+    }
+    #output img {
+      max-width: 150px;
+      margin: 5px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+    }
