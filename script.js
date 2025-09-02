@@ -6,7 +6,7 @@ const images = [
 
 function downloadImage(image) {
   return new Promise((resolve, reject) => {
-    const img = new Image();
+    const img = document.createElement("img");
     img.src = image.url;
 
     img.onload = () => resolve(img);
@@ -24,10 +24,11 @@ function downloadImages(images) {
 
   loadingDiv.style.display = "block";
 
+  // wait for all downloads to complete
   Promise.all(images.map(downloadImage))
-    .then(results => {
+    .then(imgElements => {
       loadingDiv.style.display = "none";
-      results.forEach(img => outputDiv.appendChild(img));
+      imgElements.forEach(img => outputDiv.appendChild(img));
     })
     .catch(err => {
       loadingDiv.style.display = "none";
@@ -35,8 +36,9 @@ function downloadImages(images) {
     });
 }
 
-// 🔑 Only start downloading when button is clicked
-document.getElementById("download-images-button")
+// Only download when button is clicked
+document
+  .getElementById("download-images-button")
   .addEventListener("click", () => {
     downloadImages(images);
   });
