@@ -4,7 +4,6 @@ const images = [
   { url: "https://picsum.photos/id/239/200/300" }
 ];
 
-// Function to download one image
 function downloadImage(image) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -15,7 +14,6 @@ function downloadImage(image) {
   });
 }
 
-// Function to download all images
 function downloadImages(images) {
   const loadingDiv = document.getElementById("loading");
   const errorDiv = document.getElementById("error");
@@ -26,19 +24,19 @@ function downloadImages(images) {
 
   loadingDiv.style.display = "block";
 
-  Promise.allSettled(images.map(downloadImage))
+  Promise.all(images.map(downloadImage))
     .then(results => {
       loadingDiv.style.display = "none";
-
-      results.forEach(result => {
-        if (result.status === "fulfilled") {
-          outputDiv.appendChild(result.value);
-        } else {
-          errorDiv.innerHTML += `<div>${result.reason}</div>`;
-        }
-      });
+      results.forEach(img => outputDiv.appendChild(img));
+    })
+    .catch(err => {
+      loadingDiv.style.display = "none";
+      errorDiv.textContent = err;
     });
 }
 
-// Start download
-downloadImages(images);
+// 🔑 Only start downloading when button is clicked
+document.getElementById("download-images-button")
+  .addEventListener("click", () => {
+    downloadImages(images);
+  });
